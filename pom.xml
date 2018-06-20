@@ -5,30 +5,23 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fr.agaetis</groupId>
-  <artifactId>monobot</artifactId>
+  <artifactId>monobot-media-api</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>monobot-api</name>
+  <name>monobot-media-api</name>
   <description>API for Monobot</description>
 
   <properties>
-    <!--<version.number>${git.commit.id}</version.number>-->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <axon.version>3.0.6</axon.version>
     <jackson.version>2.9.2</jackson.version>
-    <azure.version>1.1.0</azure.version>
     <assertj.version>3.8.0</assertj.version>
     <commons-codec.version>1.10</commons-codec.version>
     <java-jwt.version>3.3.0</java-jwt.version>
-    <azure.containerRegistry>no-registry</azure.containerRegistry>
-    <docker.image.prefix>${azure.containerRegistry}.azurecr.io</docker.image.prefix>
-    <jacoco.version>0.8.0</jacoco.version>
     <pojo-tester.version>0.7.6</pojo-tester.version>
     <equalsverifier.version>2.4.3</equalsverifier.version>
-    <git-commit-id-plugin.version>2.2.1</git-commit-id-plugin.version>
   </properties>
 
   <parent>
@@ -147,7 +140,21 @@
       <version>20180130</version>
     </dependency>
 
+    <!-- projectlombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>RELEASE</version>
+    </dependency>
+
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>projectlombok.org</id>
+      <url>http://projectlombok.org/mavenrepo</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
@@ -247,8 +254,6 @@
           </execution>
         </executions>
       </plugin>
-
-
     </plugins>
   </build>
 </project>

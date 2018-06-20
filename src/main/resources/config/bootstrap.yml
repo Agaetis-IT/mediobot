@@ -9,9 +9,9 @@ spring:
   profiles: local
     data:
       mongodb:
+        database: monobloc
         host: localhost
         port: 27017
-        database: monobloc
 
 ---
 spring:
