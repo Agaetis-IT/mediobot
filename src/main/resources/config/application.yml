@@ -28,10 +28,7 @@ spring:
             enabled: true
             force: true
 flickr:
-    groups:
-      - "16809958@N00" # Those White Plastic Chairs
-      - "55736978@N00" # plastic chairs
-      - "949716@N25"   # The ubiquitous resin chair
+    groups: 16809958@N00, 55736978@N00, 949716@N25
 
 info:
     app:
