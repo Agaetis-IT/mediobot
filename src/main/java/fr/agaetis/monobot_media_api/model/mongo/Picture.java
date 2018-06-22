@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Data
-@EqualsAndHashCode
 @Document(collection = "picture")
 public class Picture {
     @Id
