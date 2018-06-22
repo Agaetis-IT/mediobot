@@ -1,4 +1,4 @@
-package fr.agaetis.monobot;
+package fr.agaetis.monobot_media_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

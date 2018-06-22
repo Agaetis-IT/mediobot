@@ -1,6 +1,6 @@
-package fr.agaetis.monobot.web.controller;
+package fr.agaetis.monobot_media_api.web.controller;
 
-import fr.agaetis.monobot.service.FlickRService;
+import fr.agaetis.monobot_media_api.service.FlickRService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package fr.agaetis.monobot.model.mongo;
+package fr.agaetis.monobot_media_api.model.mongo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

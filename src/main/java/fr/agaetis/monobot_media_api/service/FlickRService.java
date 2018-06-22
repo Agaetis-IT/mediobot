@@ -1,12 +1,12 @@
-package fr.agaetis.monobot.service;
+package fr.agaetis.monobot_media_api.service;
 
 import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
-import fr.agaetis.monobot.model.mongo.Picture;
-import fr.agaetis.monobot.repository.mongo.PictureRepository;
+import fr.agaetis.monobot_media_api.model.mongo.Picture;
+import fr.agaetis.monobot_media_api.repository.mongo.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

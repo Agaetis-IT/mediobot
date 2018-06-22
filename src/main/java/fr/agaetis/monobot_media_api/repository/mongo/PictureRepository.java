@@ -1,6 +1,6 @@
-package fr.agaetis.monobot.repository.mongo;
+package fr.agaetis.monobot_media_api.repository.mongo;
 
-import fr.agaetis.monobot.model.mongo.Picture;
+import fr.agaetis.monobot_media_api.model.mongo.Picture;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
