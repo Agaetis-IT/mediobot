@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: monobot-media-api
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: local
+    data:
+      mongodb:
+        database: monobloc
+        host: localhost
+        port: 27017
+
+---
+spring:
+  profiles: default
+    data:
+      mongodb:
+        host: localhost
+        port: 27017
+        database: monobloc

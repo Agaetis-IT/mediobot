@@ -1,0 +1,48 @@
+# Pour des références : http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+app:
+    name: Monobot media api
+    description: Monobot media api POC services
+    version: O.0.snap
+    api:
+        key: changeme
+        secret: changeme
+
+
+# Embedded Server Configuration
+server:
+    port: 8080
+
+#Swagger API
+springfox:
+    documentation:
+        swagger:
+            v2:
+                path: /_api-docs
+
+spring:
+    # HTTP server config
+    http:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+flickr:
+    groups:
+      - "16809958@N00" # Those White Plastic Chairs
+      - "55736978@N00" # plastic chairs
+      - "949716@N25"   # The ubiquitous resin chair
+
+info:
+    app:
+        name: ${app.name}
+        description: ${app.description}
+        version: ${app.version}
+
+# application and server logging
+logging:
+    level:
+        root: WARN
+        org.springframework.web: WARN
+        org.springframework.security: WARN
+        fr.agaetis: DEBUG
