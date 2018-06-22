@@ -36,9 +36,25 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-        
-      # run tests!
-      - run: mvn package
+
+      # Install Docker client
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+
+       # Build Docker image
+       - run: mvn package
+
+       - run: |
+           docker login -u $DOCKER_USER -p $DOCKER_PWD
+           docker push agaetisit/monobot-media-api:latest
+
+
 
 
 

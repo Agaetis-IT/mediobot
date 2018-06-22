@@ -22,6 +22,7 @@
     <java-jwt.version>3.3.0</java-jwt.version>
     <pojo-tester.version>0.7.6</pojo-tester.version>
     <equalsverifier.version>2.4.3</equalsverifier.version>
+    <docker.image.prefix>agaetisit</docker.image.prefix>
   </properties>
 
   <parent>
@@ -251,6 +252,39 @@
                 </resource>
               </resources>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--Docker deployment-->
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.4.10</version>
+        <configuration>
+          <forceTags>true</forceTags>
+          <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+          <imageTags>
+            <imageTag>latest</imageTag>
+          </imageTags>
+          <serverId>${docker.image.prefix}</serverId>
+          <registryUrl>${docker.image.prefix}</registryUrl>
+          <dockerDirectory>${project.build.directory}/filtered-docker</dockerDirectory>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>${project.build.finalName}.jar</include>
+            </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
