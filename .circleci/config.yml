@@ -47,12 +47,12 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
-       # Build Docker image
-       - run: mvn package
+      # Build Docker image
+      - run: mvn package
 
-       - run: |
-           docker login -u $DOCKER_USER -p $DOCKER_PWD
-           docker push agaetisit/monobot-media-api:latest
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PWD
+          docker push agaetisit/monobot-media-api:latest
 
 
 
