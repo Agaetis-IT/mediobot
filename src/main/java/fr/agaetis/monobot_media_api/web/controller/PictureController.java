@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class PictureController {
@@ -19,10 +18,6 @@ public class PictureController {
      */
     @RequestMapping("/pictures")
     public List<String> picture() {
-        return this.flickrService.getGroups()
-            .stream()
-            .flatMap(s -> flickrService.getPhotosFromGroup(s).stream())
-            .collect(Collectors.toList())
-            ;
+        return this.flickrService.getPictures();
     }
 }

@@ -54,7 +54,7 @@ public class FlickRService {
         return !pictureRepository.findByUrl(getUrlForPhoto(photo)).isPresent();
     }
 
-    public List<String> getPhotosFromGroup(String groupId) {
+    private List<String> getPhotosFromGroup(String groupId) {
         Integer page = 0;
         PhotoList<Photo> photos;
 
@@ -75,7 +75,11 @@ public class FlickRService {
         flickr = new Flickr(this.API_KEY, this.API_SECRET, new REST());
     }
 
-    public List<String> getGroups() {
-        return this.groups;
+    public List<String> getPictures() {
+        return groups
+            .stream()
+            .flatMap(s -> getPhotosFromGroup(s).stream())
+            .collect(Collectors.toList())
+            ;
     }
 }
