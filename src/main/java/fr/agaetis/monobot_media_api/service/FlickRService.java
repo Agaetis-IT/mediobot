@@ -24,9 +24,9 @@ public class FlickRService {
     private Flickr flickr;
     @Value("${flickr.groups}")
     private List<String> groups;
-    @Value("${app.api.key}")
+    @Value("${FLICKR_API_KEY}")
     private String API_KEY;
-    @Value("${app.api.secret}")
+    @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
 
     private String saveInDatabase(Photo photo) {
