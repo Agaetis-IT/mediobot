@@ -1,4 +1,4 @@
-package fr.agaetis.monobot_media_api.config;
+package fr.agaetis.mediobot.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("fr.agaetis.monobot_media_api.api.web.controller"))
+            .apis(RequestHandlerSelectors.basePackage("fr.agaetis.mediobot.api.web.controller"))
             .paths(PathSelectors.ant("/**"))
             .build()
             .ignoredParameterTypes(ApiIgnore.class)

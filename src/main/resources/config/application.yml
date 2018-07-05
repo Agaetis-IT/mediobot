@@ -1,8 +1,8 @@
 # Pour des références : http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
 app:
-    name: Monobot media api
-    description: Monobot media api POC services
+    name: Mediobot
+    description: Service to serve medias for Monobot
     version: O.0.snap
     api:
         key: changeme

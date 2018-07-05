@@ -1,7 +1,6 @@
-package fr.agaetis.monobot_media_api.model.mongo;
+package fr.agaetis.mediobot.model.mongo;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
