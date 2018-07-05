@@ -43,7 +43,7 @@ jobs:
       # Push Docker image
       - run: |
           docker login -u $DOCKER_USER -p $DOCKER_PWD
-          docker push agaetisit/monobot-media-api:latest
+          docker push agaetisit/mediobot:latest
 
 
 
