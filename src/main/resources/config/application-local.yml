@@ -1,0 +1,14 @@
+# Pour des références : http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+info:
+    app:
+        profile: local
+
+# application and server logging
+logging:
+    level:
+        root: WARN
+        org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+        org.springframework.web: WARN
+        org.springframework.security: WARN
+        fr.agaetis: DEBUG

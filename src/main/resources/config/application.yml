@@ -4,10 +4,6 @@ app:
     name: Mediobot
     description: Service to serve medias for Monobot
     version: O.0.snap
-    api:
-        key: changeme
-        secret: changeme
-
 
 # Embedded Server Configuration
 server:
@@ -27,14 +23,21 @@ spring:
             charset: UTF-8
             enabled: true
             force: true
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: monobot
 flickr:
     groups: 16809958@N00, 55736978@N00, 949716@N25
+
 
 info:
     app:
         name: ${app.name}
         description: ${app.description}
         version: ${app.version}
+        profile: default
 
 # application and server logging
 logging:
@@ -42,4 +45,4 @@ logging:
         root: WARN
         org.springframework.web: WARN
         org.springframework.security: WARN
-        fr.agaetis: DEBUG
+        fr.agaetis: INFO

@@ -22,7 +22,7 @@ public class FlickRService {
     @Autowired
     private PictureRepository pictureRepository;
     private Flickr flickr;
-    @Value("${flickr.groups}")
+    @Value("#{'${flickr.groups}'.split(',')}")
     private List<String> groups;
     @Value("${FLICKR_API_KEY}")
     private String API_KEY;
