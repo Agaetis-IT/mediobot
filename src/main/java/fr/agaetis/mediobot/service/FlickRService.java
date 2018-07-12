@@ -5,7 +5,6 @@ import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
-import fr.agaetis.mediobot.Application;
 import fr.agaetis.mediobot.model.mongo.Picture;
 import fr.agaetis.mediobot.repository.mongo.PictureRepository;
 import org.slf4j.Logger;
@@ -78,7 +77,7 @@ public class FlickRService {
 
     @PostConstruct
     public void init() {
-        flickr = new Flickr(this.API_KEY, this.API_SECRET, new REST());
+        flickr = new Flickr(API_KEY, API_SECRET, new REST());
     }
 
     public List<String> getPictures() {
