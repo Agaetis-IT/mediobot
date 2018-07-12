@@ -7,6 +7,7 @@ import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
 import fr.agaetis.mediobot.model.mongo.Picture;
 import fr.agaetis.mediobot.repository.mongo.PictureRepository;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,20 +35,33 @@ public class FlickRService {
     private String API_KEY;
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
+    @Value("${app.basepath.picture}")
+    private String basePath;
 
     private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
 
-    private String saveInDatabase(Photo photo) {
+    private Picture saveInDatabase(Photo photo) {
         String url = getUrlForPhoto(photo);
         Picture picture = new Picture();
         picture.setUrl(url);
         picture.setAuthor(photo.getOwner().getUsername());
+        Optional<Picture> tmp = pictureRepository.findByUrl(getUrlForPhoto(photo));
 
-        if (!pictureRepository.findByUrl(getUrlForPhoto(photo)).isPresent()) {
-            pictureRepository.save(picture);
+        if (!tmp.isPresent()) {
+            String finalPath = basePath + photo.getId() + photo.getSecret() + ".jpg";
+            picture.setPath(finalPath);
+
+            try {
+                FileUtils.copyURLToFile(new URL(picture.getUrl()), new File(finalPath), 10000, 10000);
+                picture = pictureRepository.save(picture);
+                tmp = Optional.of(picture);
+            } catch (IOException e) {
+                logger.error(e.toString());
+                return null;
+            }
         }
 
-        return url;
+        return tmp.get();
     }
 
     private String getUrlForPhoto(Photo photo) {
@@ -56,7 +74,7 @@ public class FlickRService {
         );
     }
 
-    private List<String> getPhotosFromGroup(String groupId) {
+    private List<Picture> getPhotosFromGroup(String groupId) {
         Integer page = 0;
         PhotoList<Photo> photos;
 
@@ -80,7 +98,7 @@ public class FlickRService {
         flickr = new Flickr(API_KEY, API_SECRET, new REST());
     }
 
-    public List<String> getPictures() {
+    public List<Picture> getPictures() {
         return groups
             .stream()
             .flatMap(s -> getPhotosFromGroup(s).stream())
