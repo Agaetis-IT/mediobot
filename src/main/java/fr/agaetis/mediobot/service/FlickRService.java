@@ -32,7 +32,7 @@ public class FlickRService {
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
 
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
 
     private String saveInDatabase(Photo photo) {
         String url = getUrlForPhoto(photo);

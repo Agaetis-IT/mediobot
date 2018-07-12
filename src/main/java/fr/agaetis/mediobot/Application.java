@@ -17,8 +17,6 @@ import javax.annotation.PostConstruct;
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 public class Application {
-    @Autowired
-    private Environment environment;
     @Value("${server.port}")
     private int port;
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
