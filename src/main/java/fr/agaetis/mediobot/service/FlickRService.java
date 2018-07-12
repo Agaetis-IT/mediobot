@@ -35,7 +35,9 @@ public class FlickRService {
         picture.setUrl(url);
         picture.setAuthor(photo.getOwner().getUsername());
 
-        pictureRepository.save(picture);
+        if (!pictureRepository.findByUrl(getUrlForPhoto(photo)).isPresent()) {
+            pictureRepository.save(picture);
+        }
 
         return url;
     }
@@ -50,10 +52,6 @@ public class FlickRService {
         );
     }
 
-    private boolean isPhotoCanSaved(Photo photo) {
-        return !pictureRepository.findByUrl(getUrlForPhoto(photo)).isPresent();
-    }
-
     private List<String> getPhotosFromGroup(String groupId) {
         Integer page = 0;
         PhotoList<Photo> photos;
@@ -65,7 +63,6 @@ public class FlickRService {
         }
 
         return photos.stream()
-            .filter(this::isPhotoCanSaved)
             .map(this::saveInDatabase)
             .collect(Collectors.toList());
     }
