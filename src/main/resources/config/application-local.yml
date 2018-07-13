@@ -1,14 +1,18 @@
 # Pour des références : http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
-info:
-    app:
-        profile: local
+# MongoDB
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: monobloc
 
 # application and server logging
 logging:
-    level:
-        root: WARN
-        org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-        org.springframework.web: WARN
-        org.springframework.security: WARN
-        fr.agaetis: DEBUG
+  level:
+    root: WARN
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    fr.agaetis: DEBUG

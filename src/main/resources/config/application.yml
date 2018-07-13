@@ -1,44 +1,36 @@
 # Pour des références : http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
-
 app:
-    name: Mediobot
-    description: Service to serve medias for Monobot
-    version: O.0.snap
+  name: Mediobot
+  description: Service to serve medias for Monobot
+  version: 1.0
 
-# Embedded Server Configuration
+# Embedded Server
 server:
-    port: 8080
+  port: 8080
 
 #Swagger API
 springfox:
-    documentation:
-        swagger:
-            v2:
-                path: /_api-docs
+  documentation:
+    swagger:
+      v2:
+        path: /_api-docs
 
-spring:
-    # HTTP server config
-    http:
-        encoding:
-            charset: UTF-8
-            enabled: true
-            force: true
-
+# Flickr API
 flickr:
     groups: 16809958@N00, 55736978@N00, 949716@N25
 
-
-info:
-    app:
-        name: ${app.name}
-        description: ${app.description}
-        version: ${app.version}
-        profile: default
+# MongoDB
+spring:
+  data:
+    mongodb:
+      host: mongo-service
+      port: 27017
+      database: mediobot
 
 # application and server logging
 logging:
-    level:
-        root: WARN
-        org.springframework.web: WARN
-        org.springframework.security: WARN
-        fr.agaetis: INFO
+  level:
+    root: WARN
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    fr.agaetis: INFO

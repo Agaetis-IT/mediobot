@@ -3,21 +3,3 @@ spring:
     name: mediobot
   profiles:
     active: default
-
----
-spring:
-  profiles: local
-  data:
-    mongodb:
-      database: monobloc
-      host: localhost
-      port: 27017
-
----
-spring:
-  profiles: default
-  data:
-    mongodb:
-      host: mongo-service
-      port: 27017
-      database: mediobot
