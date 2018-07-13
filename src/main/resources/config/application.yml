@@ -23,11 +23,7 @@ spring:
             charset: UTF-8
             enabled: true
             force: true
-    data:
-        mongodb:
-            host: localhost
-            port: 27017
-            database: monobot
+
 flickr:
     groups: 16809958@N00, 55736978@N00, 949716@N25
 
