@@ -7,6 +7,8 @@ import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
 import fr.agaetis.mediobot.model.mongo.Picture;
 import fr.agaetis.mediobot.repository.mongo.PictureRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,14 @@ public class FlickRService {
     @Autowired
     private PictureRepository pictureRepository;
     private Flickr flickr;
-    @Value("${flickr.groups}")
+    @Value("#{'${flickr.groups}'.split(',')}")
     private List<String> groups;
     @Value("${FLICKR_API_KEY}")
     private String API_KEY;
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
+
+    private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
 
     private String saveInDatabase(Photo photo) {
         String url = getUrlForPhoto(photo);
@@ -57,8 +61,12 @@ public class FlickRService {
         PhotoList<Photo> photos;
 
         try {
-            photos = flickr.getPoolsInterface().getPhotos(groupId, null, 15, page);
+            logger.debug("trying group: {} ", groupId);
+            photos = flickr.getPoolsInterface().getPhotos(groupId, null, 33, page);
+            logger.debug("total photos: {}", photos.getTotal());
+            logger.debug("total pages: {}", photos.getPages());
         } catch (FlickrException e) {
+            logger.error("Error: {}", e.toString());
             return new ArrayList<>();
         }
 
@@ -69,7 +77,7 @@ public class FlickRService {
 
     @PostConstruct
     public void init() {
-        flickr = new Flickr(this.API_KEY, this.API_SECRET, new REST());
+        flickr = new Flickr(API_KEY, API_SECRET, new REST());
     }
 
     public List<String> getPictures() {
