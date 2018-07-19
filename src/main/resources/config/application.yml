@@ -3,8 +3,9 @@ app:
   name: Mediobot
   description: Service to serve medias for Monobot
   version: 1.0
-  basepath:
-    picture: "/pictures/"
+  pictures:
+    storage:
+      basepath: "/pictures/"
 
 # Embedded Server
 server:

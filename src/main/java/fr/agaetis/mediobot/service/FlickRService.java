@@ -20,12 +20,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class FlickRService {
 
+    private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
     @Autowired
     private PictureRepository pictureRepository;
     private Flickr flickr;
@@ -35,10 +37,8 @@ public class FlickRService {
     private String API_KEY;
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
-    @Value("${app.basepath.picture}")
+    @Value("${app.pictures.storage.basepath}")
     private String basePath;
-
-    private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
 
     private Picture saveInDatabase(Photo photo) {
         String url = getUrlForPhoto(photo);
@@ -47,30 +47,29 @@ public class FlickRService {
         picture.setAuthor(photo.getOwner().getUsername());
         Optional<Picture> tmp = pictureRepository.findByUrl(getUrlForPhoto(photo));
 
-        if (!tmp.isPresent()) {
-            String finalPath = basePath + photo.getId() + photo.getSecret() + ".jpg";
-            picture.setPath(finalPath);
-
-            try {
-                FileUtils.copyURLToFile(new URL(picture.getUrl()), new File(finalPath), 10000, 10000);
-                picture = pictureRepository.save(picture);
-                tmp = Optional.of(picture);
-            } catch (IOException e) {
-                logger.error(e.toString());
-                return null;
-            }
+        if (tmp.isPresent()) {
+            return tmp.get();
         }
 
-        return tmp.get();
+        String finalPath = basePath + getPictureNameFromPhoto(photo);
+        picture.setPath(finalPath);
+
+        try {
+            FileUtils.copyURLToFile(new URL(picture.getUrl()), new File(finalPath), 10000, 10000);
+        } catch (IOException e) {
+            logger.error(e.toString());
+            return null;
+        }
+
+        return pictureRepository.save(picture);
     }
 
     private String getUrlForPhoto(Photo photo) {
         return String.format(
-            "https://farm%s.staticflickr.com/%s/%s_%s.jpg",
+            "https://farm%s.staticflickr.com/%s/%s",
             photo.getFarm(),
             photo.getServer(),
-            photo.getId(),
-            photo.getSecret()
+            getPictureNameFromPhoto(photo)
         );
     }
 
@@ -90,6 +89,7 @@ public class FlickRService {
 
         return photos.stream()
             .map(this::saveInDatabase)
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
     }
 
@@ -104,5 +104,9 @@ public class FlickRService {
             .flatMap(s -> getPhotosFromGroup(s).stream())
             .collect(Collectors.toList())
             ;
+    }
+
+    private String getPictureNameFromPhoto(Photo photo) {
+        return String.format("%s_%s.jpg", photo.getId(), photo.getSecret());
     }
 }

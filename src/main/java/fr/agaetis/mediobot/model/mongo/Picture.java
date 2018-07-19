@@ -1,7 +1,7 @@
 package fr.agaetis.mediobot.model.mongo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document(collection = "picture")
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class Picture {
 
     @Id
@@ -22,7 +22,4 @@ public class Picture {
     private Number score;
     private String shapeObject;
     private String path;
-
-    public Picture() {
-    }
 }
