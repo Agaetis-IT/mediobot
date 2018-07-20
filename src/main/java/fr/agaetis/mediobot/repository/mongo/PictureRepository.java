@@ -1,13 +1,10 @@
 package fr.agaetis.mediobot.repository.mongo;
 
 import fr.agaetis.mediobot.model.mongo.Picture;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface PictureRepository extends CrudRepository<Picture, String> {
-
-    @Query(value = "{'url': ?0}")
+public interface PictureRepository extends MongoRepository<Picture, String> {
     Optional<Picture> findByUrl(String url);
 }

@@ -6,30 +6,21 @@ import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
 import fr.agaetis.mediobot.model.mongo.Picture;
-import fr.agaetis.mediobot.repository.mongo.PictureRepository;
-import org.apache.commons.io.FileUtils;
+import fr.agaetis.mediobot.model.mongo.PictureOrigin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class FlickRService {
-
     private static final Logger logger = LoggerFactory.getLogger(FlickRService.class);
-    @Autowired
-    private PictureRepository pictureRepository;
+
     private Flickr flickr;
     @Value("#{'${flickr.groups}'.split(',')}")
     private List<String> groups;
@@ -37,46 +28,22 @@ public class FlickRService {
     private String API_KEY;
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
-    @Value("${app.pictures.storage.basepath}")
-    private String basePath;
 
-    private Picture saveInDatabase(Photo photo) {
-        String url = getUrlForPhoto(photo);
-        Picture picture = new Picture();
-        picture.setUrl(url);
-        picture.setAuthor(photo.getOwner().getUsername());
-        Optional<Picture> tmp = pictureRepository.findByUrl(getUrlForPhoto(photo));
-
-        if (tmp.isPresent()) {
-            return tmp.get();
-        }
-
-        String finalPath = basePath + getPictureNameFromPhoto(photo);
-        picture.setPath(finalPath);
-
-        try {
-            FileUtils.copyURLToFile(new URL(picture.getUrl()), new File(finalPath), 10000, 10000);
-        } catch (IOException e) {
-            logger.error(e.toString());
-            return null;
-        }
-
-        return pictureRepository.save(picture);
+    @PostConstruct
+    public void init() {
+        flickr = new Flickr(API_KEY, API_SECRET, new REST());
     }
 
-    private String getUrlForPhoto(Photo photo) {
-        return String.format(
-            "https://farm%s.staticflickr.com/%s/%s",
-            photo.getFarm(),
-            photo.getServer(),
-            getPictureNameFromPhoto(photo)
-        );
+    public List<Picture> getPictures() {
+        return groups
+            .stream()
+            .flatMap(s -> getPhotosFromGroup(s).stream())
+            .collect(Collectors.toList());
     }
 
     private List<Picture> getPhotosFromGroup(String groupId) {
         Integer page = 0;
         PhotoList<Photo> photos;
-
         try {
             logger.debug("trying group: {} ", groupId);
             photos = flickr.getPoolsInterface().getPhotos(groupId, null, 33, page);
@@ -88,22 +55,26 @@ public class FlickRService {
         }
 
         return photos.stream()
-            .map(this::saveInDatabase)
-            .filter(Objects::nonNull)
+            .map(this::convertPhotoToPicture)
             .collect(Collectors.toList());
     }
 
-    @PostConstruct
-    public void init() {
-        flickr = new Flickr(API_KEY, API_SECRET, new REST());
+    private Picture convertPhotoToPicture(Photo photo) {
+        Picture picture = new Picture();
+        picture.setOrigin(PictureOrigin.FLICKR);
+        picture.setUrl(getUrlForPhoto(photo));
+        picture.setAuthor(photo.getOwner().getUsername());
+        picture.setPath("/flickr/" + getPictureNameFromPhoto(photo));
+        return picture;
     }
 
-    public List<Picture> getPictures() {
-        return groups
-            .stream()
-            .flatMap(s -> getPhotosFromGroup(s).stream())
-            .collect(Collectors.toList())
-            ;
+    private String getUrlForPhoto(Photo photo) {
+        return String.format(
+            "https://farm%s.staticflickr.com/%s/%s",
+            photo.getFarm(),
+            photo.getServer(),
+            getPictureNameFromPhoto(photo)
+        );
     }
 
     private String getPictureNameFromPhoto(Photo photo) {
