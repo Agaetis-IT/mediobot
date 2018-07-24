@@ -21,6 +21,7 @@ springfox:
 # Flickr API
 flickr:
     groups: 16809958@N00, 55736978@N00, 949716@N25
+    maxPicturesPerGroup: -1
 
 # MongoDB
 spring:

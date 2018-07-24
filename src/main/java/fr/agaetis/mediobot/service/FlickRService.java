@@ -4,7 +4,6 @@ import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
-import com.flickr4java.flickr.photos.PhotoList;
 import fr.agaetis.mediobot.model.mongo.Picture;
 import fr.agaetis.mediobot.model.mongo.PictureDetectionStatus;
 import fr.agaetis.mediobot.model.mongo.PictureOrigin;
@@ -29,6 +28,9 @@ public class FlickRService {
     private String API_KEY;
     @Value("${FLICKR_API_SECRET}")
     private String API_SECRET;
+    @Value("${flickr.maxPicturesPerGroup}")
+    private int maxPicturesPerGroup;
+    private static final int MAX_PER_PAGE = 100;
 
     @PostConstruct
     public void init() {
@@ -44,17 +46,40 @@ public class FlickRService {
 
     private List<Picture> getPhotosFromGroup(String groupId) {
         Integer page = 0;
-        PhotoList<Photo> photos;
-        try {
-            logger.debug("trying group: {} ", groupId);
-            photos = flickr.getPoolsInterface().getPhotos(groupId, null, 33, page);
-            logger.debug("total photos: {}", photos.getTotal());
-            logger.debug("total pages: {}", photos.getPages());
-        } catch (FlickrException e) {
-            logger.error("Error: {}", e.toString());
-            return new ArrayList<>();
+        int maxPerPage = (maxPicturesPerGroup == -1 || maxPicturesPerGroup > MAX_PER_PAGE) ? MAX_PER_PAGE : maxPicturesPerGroup;
+        boolean atEnd = false;
+
+        List<Photo> photos = new ArrayList<>();
+
+        while (!atEnd) {
+            try {
+                logger.debug("trying group: {} ", groupId);
+
+                int nbPerPage = maxPerPage;
+                if ( (maxPicturesPerGroup - photos.size()) < maxPerPage ) {
+                    nbPerPage = maxPicturesPerGroup - photos.size();
+                    atEnd = true;
+                }
+
+                logger.debug("request {} photos with page {}", nbPerPage, page);
+                List<Photo> currentPhotos = flickr.getPoolsInterface().getPhotos(groupId, null, nbPerPage, page);
+                page ++;
+
+                if (currentPhotos.isEmpty()) {
+                    logger.debug("at end because no more photos in group. Total : {} ", photos.size());
+                    atEnd = true;
+                } else {
+                    logger.debug("add {} photos", currentPhotos.size());
+                    photos.addAll(currentPhotos);
+                }
+
+            } catch (FlickrException e) {
+                logger.error("Error: {}", e.toString());
+                return new ArrayList<>();
+            }
         }
 
+        logger.debug("total photos: {}", photos.size());
         return photos.stream()
             .map(this::convertPhotoToPicture)
             .collect(Collectors.toList());
