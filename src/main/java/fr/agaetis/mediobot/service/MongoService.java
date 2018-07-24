@@ -56,4 +56,7 @@ public class MongoService {
         pictureRepository.save(picture);
     }
 
+    public Optional<Picture> getPicture(String id) {
+        return Optional.ofNullable(pictureRepository.findOne(id));
+    }
 }

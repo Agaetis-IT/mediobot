@@ -5,16 +5,25 @@ import fr.agaetis.mediobot.service.DetectionService;
 import fr.agaetis.mediobot.service.FlickRService;
 import fr.agaetis.mediobot.service.MongoService;
 import fr.agaetis.mediobot.service.StorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/picture")
 public class PictureController {
+    private static final Logger logger = LoggerFactory.getLogger(PictureController.class);
+
     @Autowired
     private FlickRService flickrService;
 
@@ -68,4 +77,27 @@ public class PictureController {
     public void pictureDetectionWasProcessedWithError(Picture picture) {
         mongoService.proccessPitcureWithError(picture);
     }
+
+    @RequestMapping(
+        value = "/image/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> getPictureImage(String id) {
+
+        Optional<Picture> picture = mongoService.getPicture(id);
+        if (!picture.isPresent()) {
+            logger.error("Picture with id {} not found in database", id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        String picturePath = picture.get().getPath();
+        try {
+            byte[] image = storageService.getPictureImage(picturePath);
+            return new ResponseEntity<>(image, HttpStatus.OK);
+        } catch (IOException e) {
+            logger.error("Image with path {} not found on disk", picturePath);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

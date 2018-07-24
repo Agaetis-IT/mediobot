@@ -35,6 +35,10 @@ public class StorageService {
         } catch (IOException e) {
             logger.error(e.toString());
         }
+    }
 
+    public byte[] getPictureImage(String path) throws IOException {
+        Path finalPath = Paths.get(basePath + path);
+        return Files.readAllBytes(finalPath);
     }
 }
