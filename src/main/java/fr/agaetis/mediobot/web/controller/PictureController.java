@@ -1,6 +1,7 @@
 package fr.agaetis.mediobot.web.controller;
 
 import fr.agaetis.mediobot.model.mongo.Picture;
+import fr.agaetis.mediobot.service.DetectionService;
 import fr.agaetis.mediobot.service.FlickRService;
 import fr.agaetis.mediobot.service.MongoService;
 import fr.agaetis.mediobot.service.StorageService;
@@ -22,12 +23,16 @@ public class PictureController {
     @Autowired
     private StorageService storageService;
 
-    @RequestMapping(value = "/pictures/unprocessed", method = RequestMethod.GET)
-    public List<Picture> getUnprocessedPictures() {
-        return mongoService.getUnprocessedPictures();
+    @Autowired
+    private DetectionService detectionService;
+
+    @RequestMapping(value = "/pictures/detect", method = RequestMethod.POST)
+    public void triggerPicturesDetection() {
+        List<Picture> unprocessedPictures = mongoService.getUnprocessedPictures();
+        detectionService.launchDetection(unprocessedPictures);
     }
 
-    @RequestMapping(value = "/pictures/media", method = RequestMethod.POST)
+    @RequestMapping(value = "/pictures/media/retrieve", method = RequestMethod.POST)
     public void retrievePicturesFromMedia() {
         processFlickrMedia();
     }
