@@ -51,14 +51,15 @@ public class FlickRService {
 
         List<Photo> photos = new ArrayList<>();
 
+        logger.debug("trying group: {} with max {} ", groupId, maxPicturesPerGroup);
         while (!atEnd) {
             try {
-                logger.debug("trying group: {} ", groupId);
 
                 int nbPerPage = maxPerPage;
-                if ( (maxPicturesPerGroup - photos.size()) < maxPerPage ) {
+                if ( (maxPicturesPerGroup - photos.size()) <= maxPerPage ) {
                     nbPerPage = maxPicturesPerGroup - photos.size();
                     atEnd = true;
+                    logger.debug("at end because max photos in group reached this iteration : {} ", nbPerPage);
                 }
 
                 logger.debug("request {} photos with page {}", nbPerPage, page);
@@ -66,8 +67,8 @@ public class FlickRService {
                 page ++;
 
                 if (currentPhotos.isEmpty()) {
-                    logger.debug("at end because no more photos in group. Total : {} ", photos.size());
                     atEnd = true;
+                    logger.debug("at end because no more photos in group");
                 } else {
                     logger.debug("add {} photos", currentPhotos.size());
                     photos.addAll(currentPhotos);
