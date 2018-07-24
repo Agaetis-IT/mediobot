@@ -1,6 +1,7 @@
 package fr.agaetis.mediobot.service;
 
 import fr.agaetis.mediobot.model.mongo.Picture;
+import fr.agaetis.mediobot.model.mongo.PictureDetectionStatus;
 import fr.agaetis.mediobot.repository.mongo.PictureRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +18,42 @@ public class MongoService {
     @Autowired
     private PictureRepository pictureRepository;
 
-    public List<Picture> getUnprocessedPictures() {
-        return pictureRepository.findAll();
-    }
 
-    public void saveInDatabase(Picture picture) {
-        logger.debug("Try to save picture {} in database", picture);
+    public void add(Picture picture) {
+        logger.debug("Try to add the picture {} to the database", picture);
 
         Optional<Picture> tmp = pictureRepository.findByUrl(picture.getUrl());
         if (tmp.isPresent()) {
-            logger.debug("Picture {} is already present in database", picture);
+            logger.debug("Picture {} is already present in database, skipped", picture);
             return;
         }
 
         pictureRepository.save(picture);
-        logger.debug("Picture saved in database : {}", picture);
+        logger.debug("Picture added to the database : {}", picture);
     }
+
+    public List<Picture> getUnprocessedPictures() {
+        return pictureRepository.findByDetectionStatus(PictureDetectionStatus.UNPROCESSED);
+    }
+
+    public List<Picture> getPicturesProccessedWithSuccess() {
+        return pictureRepository.findByDetectionStatus(PictureDetectionStatus.SUCCESS);
+    }
+
+    public void proccessPitcureWithSuccess(Picture picture) {
+        logger.info("Picture with id {} was processed by Detectobot with success");
+        picture.setDetectionStatus(PictureDetectionStatus.SUCCESS);
+        pictureRepository.save(picture);
+    }
+
+    public List<Picture> getPicturesProccessedWithError() {
+        return pictureRepository.findByDetectionStatus(PictureDetectionStatus.ERROR);
+    }
+
+    public void proccessPitcureWithError(Picture picture) {
+        logger.warn("Picture with id {} was processed by Detectobot with error");
+        picture.setDetectionStatus(PictureDetectionStatus.ERROR);
+        pictureRepository.save(picture);
+    }
+
 }

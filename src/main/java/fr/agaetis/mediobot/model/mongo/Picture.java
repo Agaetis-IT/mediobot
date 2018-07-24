@@ -1,5 +1,6 @@
 package fr.agaetis.mediobot.model.mongo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -14,7 +15,7 @@ public class Picture {
     private String url;
     private PictureOrigin origin;
     private String author;
-    private Number score;
-    private String shapeObject;
     private String path;
+    @JsonIgnore
+    private PictureDetectionStatus detectionStatus;
 }

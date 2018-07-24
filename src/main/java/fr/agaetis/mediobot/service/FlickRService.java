@@ -6,6 +6,7 @@ import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.photos.Photo;
 import com.flickr4java.flickr.photos.PhotoList;
 import fr.agaetis.mediobot.model.mongo.Picture;
+import fr.agaetis.mediobot.model.mongo.PictureDetectionStatus;
 import fr.agaetis.mediobot.model.mongo.PictureOrigin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,7 @@ public class FlickRService {
     private Picture convertPhotoToPicture(Photo photo) {
         Picture picture = new Picture();
         picture.setOrigin(PictureOrigin.FLICKR);
+        picture.setDetectionStatus(PictureDetectionStatus.UNPROCESSED);
         picture.setUrl(getUrlForPhoto(photo));
         picture.setAuthor(photo.getOwner().getUsername());
         picture.setPath("/flickr/" + getPictureNameFromPhoto(photo));

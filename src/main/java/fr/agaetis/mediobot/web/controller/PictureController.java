@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/picture")
 public class PictureController {
     @Autowired
     private FlickRService flickrService;
@@ -26,20 +27,45 @@ public class PictureController {
     @Autowired
     private DetectionService detectionService;
 
-    @RequestMapping(value = "/pictures/detect", method = RequestMethod.POST)
-    public void triggerPicturesDetection() {
-        List<Picture> unprocessedPictures = mongoService.getUnprocessedPictures();
-        detectionService.launchDetection(unprocessedPictures);
-    }
-
-    @RequestMapping(value = "/pictures/media/retrieve", method = RequestMethod.POST)
+    @RequestMapping(value = "/media/retrieve", method = RequestMethod.POST)
     public void retrievePicturesFromMedia() {
         processFlickrMedia();
     }
 
     private void processFlickrMedia() {
         List<Picture> flickrPictures = flickrService.getPictures();
-        flickrPictures.forEach(mongoService::saveInDatabase);
+        flickrPictures.forEach(mongoService::add);
         flickrPictures.forEach(storageService::saveOnDisk);
+    }
+
+    @RequestMapping(value = "/detection/trigger", method = RequestMethod.POST)
+    public void triggerPicturesDetection() {
+        List<Picture> unprocessedPictures = mongoService.getUnprocessedPictures();
+        detectionService.launchDetection(unprocessedPictures);
+    }
+
+    @RequestMapping(value = "/detection/unprocessed", method = RequestMethod.GET)
+    public List<Picture> getUnprocessedPictures() {
+        return mongoService.getUnprocessedPictures();
+    }
+
+    @RequestMapping(value = "/detection/processed/success", method = RequestMethod.GET)
+    public List<Picture> getPicturesProcessedWithSuccess() {
+        return mongoService.getPicturesProccessedWithSuccess();
+    }
+
+    @RequestMapping(value = "/detection/processed/success", method = RequestMethod.POST)
+    public void pictureDetectionWasProcessed(Picture picture) {
+        mongoService.proccessPitcureWithSuccess(picture);
+    }
+
+    @RequestMapping(value = "/detection/proccessed/error", method = RequestMethod.GET)
+    public List<Picture> getPicturesProcessedWithError() {
+        return mongoService.getPicturesProccessedWithError();
+    }
+
+    @RequestMapping(value = "/detection/proccessed/error", method = RequestMethod.POST)
+    public void pictureDetectionWasProcessedWithError(Picture picture) {
+        mongoService.proccessPitcureWithError(picture);
     }
 }
