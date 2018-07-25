@@ -51,7 +51,7 @@ public class FlickRService {
 
         List<Photo> photos = new ArrayList<>();
 
-        logger.debug("trying group: {} with max {} ", groupId, maxPicturesPerGroup);
+        logger.info("Retrieve pictures from group: {} with max {} ", groupId, maxPicturesPerGroup);
         while (!atEnd) {
             try {
 
@@ -80,7 +80,7 @@ public class FlickRService {
             }
         }
 
-        logger.debug("total photos: {}", photos.size());
+        logger.info("Total pictures retrieved : {}", photos.size());
         return photos.stream()
             .map(this::convertPhotoToPicture)
             .collect(Collectors.toList());
