@@ -54,25 +54,16 @@ public class FlickRService {
         logger.info("Retrieve pictures from group: {} with max {} ", groupId, maxPicturesPerGroup);
         while (!atEnd) {
             try {
-
-                int nbPerPage = maxPerPage;
-                if ( (maxPicturesPerGroup - photos.size()) <= maxPerPage ) {
-                    nbPerPage = maxPicturesPerGroup - photos.size();
-                    atEnd = true;
-                    logger.debug("at end because max photos in group reached this iteration : {} ", nbPerPage);
-                }
-
-                logger.debug("request {} photos with page {}", nbPerPage, page);
-                List<Photo> currentPhotos = flickr.getPoolsInterface().getPhotos(groupId, null, nbPerPage, page);
+                logger.debug("request {} photos with page {}", maxPerPage, page);
+                List<Photo> currentPhotos = flickr.getPoolsInterface().getPhotos(groupId, null, maxPerPage, page);
                 page ++;
 
-                if (currentPhotos.isEmpty()) {
+                if (currentPhotos.size() < maxPerPage) {
                     atEnd = true;
                     logger.debug("at end because no more photos in group");
-                } else {
-                    logger.debug("add {} photos", currentPhotos.size());
-                    photos.addAll(currentPhotos);
                 }
+                logger.debug("add {} photos", currentPhotos.size());
+                photos.addAll(currentPhotos);
 
             } catch (FlickrException e) {
                 logger.error("Error: {}", e.toString());
