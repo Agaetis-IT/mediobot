@@ -69,12 +69,12 @@ public class PictureController {
         mongoService.proccessPitcureWithSuccess(picture);
     }
 
-    @RequestMapping(value = "/detection/proccessed/error", method = RequestMethod.GET)
+    @RequestMapping(value = "/detection/processed/error", method = RequestMethod.GET)
     public List<Picture> getPicturesProcessedWithError() {
         return mongoService.getPicturesProccessedWithError();
     }
 
-    @RequestMapping(value = "/detection/proccessed/error", method = RequestMethod.POST)
+    @RequestMapping(value = "/detection/processed/error", method = RequestMethod.POST)
     public void pictureDetectionWasProcessedWithError(Picture picture) {
         mongoService.proccessPitcureWithError(picture);
     }
