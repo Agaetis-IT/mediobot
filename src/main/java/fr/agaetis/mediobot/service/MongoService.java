@@ -41,7 +41,7 @@ public class MongoService {
     }
 
     public void proccessPitcureWithSuccess(Picture picture) {
-        logger.info("Picture with id {} was processed by Detectobot with success");
+        logger.info("Picture with id {} was processed by Detectobot with success", picture.getId());
         picture.setDetectionStatus(PictureDetectionStatus.SUCCESS);
         pictureRepository.save(picture);
     }
@@ -51,7 +51,7 @@ public class MongoService {
     }
 
     public void proccessPitcureWithError(Picture picture) {
-        logger.warn("Picture with id {} was processed by Detectobot with error");
+        logger.warn("Picture with id {} was processed by Detectobot with error", picture.getId());
         picture.setDetectionStatus(PictureDetectionStatus.ERROR);
         pictureRepository.save(picture);
     }
