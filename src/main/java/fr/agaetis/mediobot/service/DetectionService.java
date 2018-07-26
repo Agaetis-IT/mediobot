@@ -29,7 +29,7 @@ public class DetectionService {
 
     public void launchDetection(List<Picture> pictures) {
         String url = detectobotBaseUrl + "/detectobot/" + detectobotVersion + "/detection";
-        logger.info("Launch detection on url {} and for pictures {}", url, pictures);
+        logger.info("Launch detection on url {} and for {} pictures", url, pictures.size());
         restTemplate.postForEntity(url, pictures, Void.class);
     }
 }
