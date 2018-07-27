@@ -1,6 +1,6 @@
 package fr.agaetis.mediobot.service;
 
-import fr.agaetis.mediobot.model.mongo.Picture;
+import fr.agaetis.mediobot.web.controller.PictureDetectobotInputView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class DetectionService {
         restTemplate = new RestTemplate();
     }
 
-    public void launchDetection(List<Picture> pictures) {
+    public void launchDetection(List<PictureDetectobotInputView> pictures) {
         String url = detectobotBaseUrl + "/detectobot/" + detectobotVersion + "/detection";
         logger.info("Launch detection on url {} and for {} pictures", url, pictures.size());
         restTemplate.postForEntity(url, pictures, Void.class);

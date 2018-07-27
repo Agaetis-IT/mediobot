@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -48,7 +49,10 @@ public class PictureController {
 
     @RequestMapping(value = "/detection/trigger", method = RequestMethod.POST)
     public void triggerPicturesDetection() {
-        List<Picture> unprocessedPictures = mongoService.getUnprocessedPictures();
+        List<PictureDetectobotInputView> unprocessedPictures = mongoService.getUnprocessedPictures()
+            .stream()
+            .map(p -> new PictureDetectobotInputView(p.getId(), p.getUrl(), p.getOrigin(), p.getAuthor(), p.getPath()))
+            .collect(Collectors.toList());
         detectionService.launchDetection(unprocessedPictures);
     }
 
