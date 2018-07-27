@@ -2,7 +2,8 @@ package fr.agaetis.mediobot.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,10 +11,7 @@ import java.util.List;
 
 @Document(collection = "picture")
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Picture {
     @Id

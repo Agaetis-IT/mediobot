@@ -1,13 +1,10 @@
 package fr.agaetis.mediobot.model.mongo;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@NoArgsConstructor // constructor needed for reconstruction
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@NoArgsConstructor
+@Data
 public class PictureDetectionBox {
     private double topLeftX;
     private double topLeftY;
