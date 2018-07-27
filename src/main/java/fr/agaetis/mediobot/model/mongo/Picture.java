@@ -20,7 +20,7 @@ public class Picture {
     private String author;
     private String path;
     private List<PictureDetection> detections = new ArrayList<>();
-    private String detectionError;
+    private String detectionError = "";
     @JsonIgnore
     private PictureDetectionStatus detectionStatus;
 }
