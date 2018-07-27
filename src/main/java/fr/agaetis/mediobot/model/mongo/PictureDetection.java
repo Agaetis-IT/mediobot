@@ -1,10 +1,13 @@
 package fr.agaetis.mediobot.model.mongo;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class PictureDetection {
     private PictureDetectionBox box;
     private String label;
