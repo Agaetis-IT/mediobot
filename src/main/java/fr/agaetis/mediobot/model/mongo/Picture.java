@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class Picture {
     private PictureOrigin origin;
     private String author;
     private String path;
-    private List<PictureDetection> detections;
+    private List<PictureDetection> detections = new ArrayList<>();
     private String detectionError;
     @JsonIgnore
     private PictureDetectionStatus detectionStatus;
