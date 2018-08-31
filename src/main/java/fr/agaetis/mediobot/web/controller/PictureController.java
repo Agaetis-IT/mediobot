@@ -68,7 +68,7 @@ public class PictureController {
 
     @RequestMapping(value = "/detection/processed/success", method = RequestMethod.POST)
     public void pictureDetectionWasProcessed(@RequestBody Picture picture) {
-        mongoService.proccessPitcureWithSuccess(picture);
+        mongoService.proccessPictureWithSuccess(picture);
     }
 
     @RequestMapping(value = "/detection/processed/error", method = RequestMethod.GET)
@@ -78,7 +78,7 @@ public class PictureController {
 
     @RequestMapping(value = "/detection/processed/error", method = RequestMethod.POST)
     public void pictureDetectionWasProcessedWithError(@RequestBody Picture picture) {
-        mongoService.proccessPitcureWithError(picture);
+        mongoService.proccessPictureWithError(picture);
     }
 
     @RequestMapping(
