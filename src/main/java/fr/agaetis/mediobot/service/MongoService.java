@@ -2,7 +2,9 @@ package fr.agaetis.mediobot.service;
 
 import fr.agaetis.mediobot.model.mongo.Picture;
 import fr.agaetis.mediobot.model.mongo.PictureDetectionStatus;
+import fr.agaetis.mediobot.model.mongo.Survey;
 import fr.agaetis.mediobot.repository.mongo.PictureRepository;
+import fr.agaetis.mediobot.repository.mongo.SurveyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,10 @@ public class MongoService {
     @Autowired
     private PictureRepository pictureRepository;
 
+    @Autowired
+    private SurveyRepository surveyRepository;
 
-    public void add(Picture picture) {
+    public void addPicture(Picture picture) {
         logger.debug("Try to add the picture {} to the database", picture);
 
         Optional<Picture> tmp = pictureRepository.findByUrl(picture.getUrl());
@@ -59,5 +63,10 @@ public class MongoService {
     public Optional<Picture> getPicture(String id) {
         logger.info("Get picture with id {} ", id);
         return Optional.ofNullable(pictureRepository.findOne(id));
+    }
+
+    public void addSurvey(Survey survey) {
+        Survey savedSurvey = surveyRepository.save(survey);
+        logger.info("Added a survey with id {} for picture with id {}", savedSurvey.getId(), savedSurvey.getPictureId());
     }
 }

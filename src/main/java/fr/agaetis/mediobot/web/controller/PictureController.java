@@ -43,7 +43,7 @@ public class PictureController {
 
     private void processFlickrMedia() {
         List<Picture> flickrPictures = flickrService.getPictures();
-        flickrPictures.forEach(mongoService::add);
+        flickrPictures.forEach(mongoService::addPicture);
         flickrPictures.forEach(storageService::saveOnDisk);
     }
 
