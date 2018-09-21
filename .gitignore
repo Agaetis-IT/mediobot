@@ -1,7 +1,8 @@
-.idea/*
+.idea/
 target/
 mediobot.iml
 .project
 .factorypath
 .classpath
-.settings/*
+.settings/
+.vscode/
