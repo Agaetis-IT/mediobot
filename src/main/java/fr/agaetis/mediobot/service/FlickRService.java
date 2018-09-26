@@ -97,7 +97,7 @@ public class FlickRService {
 
     private String getUrlForPhoto(Photo photo) {
         return String.format(
-            "https://farm%s.staticflickr.com/%s/%s",
+            "http://farm%s.staticflickr.com/%s/%s",
             photo.getFarm(),
             photo.getServer(),
             getPictureNameFromPhoto(photo)
